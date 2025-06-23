@@ -27,6 +27,8 @@ let ExportController = class ExportController {
 exports.ExportController = ExportController;
 __decorate([
     (0, common_1.Get)('activities'),
+    (0, swagger_1.ApiOperation)({ summary: 'Download activities as CSV' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'CSV file stream will download' }),
     __param(0, (0, common_1.Res)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

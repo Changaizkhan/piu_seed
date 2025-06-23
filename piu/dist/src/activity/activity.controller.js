@@ -13,7 +13,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ActivityController = void 0;
-// src/activity/activity.controller.ts
 const common_1 = require("@nestjs/common");
 const activity_service_1 = require("./activity.service");
 const create_activity_dto_1 = require("./dto/create-activity.dto");
@@ -24,23 +23,67 @@ let ActivityController = class ActivityController {
     constructor(activityService) {
         this.activityService = activityService;
     }
-    create(dto) {
-        return this.activityService.create(dto);
+    async create(dto) {
+        try {
+            return await this.activityService.create(dto);
+        }
+        catch (err) {
+            console.error('Create activity failed:', err);
+            throw new common_1.BadRequestException('Failed to create activity');
+        }
     }
-    findAll() {
-        return this.activityService.findAll();
+    async findAll() {
+        try {
+            return await this.activityService.findAll();
+        }
+        catch (err) {
+            console.error('Fetch all activities failed:', err);
+            throw new common_1.BadRequestException('Failed to fetch activities');
+        }
     }
-    findOne(id) {
-        return this.activityService.findOne(id);
+    async findOne(id) {
+        try {
+            return await this.activityService.findOne(id);
+        }
+        catch (err) {
+            console.error(`Find activity ${id} failed:`, err);
+            if (err instanceof common_1.NotFoundException)
+                throw err;
+            throw new common_1.BadRequestException('Failed to fetch activity');
+        }
     }
-    updateStatus(id, dto) {
-        return this.activityService.updateStatus(id, dto);
+    async updateStatus(id, dto) {
+        try {
+            return await this.activityService.updateStatus(id, dto);
+        }
+        catch (err) {
+            console.error(`Update status for ${id} failed:`, err);
+            if (err instanceof common_1.NotFoundException)
+                throw err;
+            throw new common_1.BadRequestException('Failed to update status');
+        }
     }
-    updateCurrentStatus(id, currentStatus) {
-        return this.activityService.updateCurrentStatus(id, currentStatus);
+    async updateCurrentStatus(id, currentStatus) {
+        try {
+            return await this.activityService.updateCurrentStatus(id, currentStatus);
+        }
+        catch (err) {
+            console.error(`Update current status for ${id} failed:`, err);
+            if (err instanceof common_1.NotFoundException)
+                throw err;
+            throw new common_1.BadRequestException('Failed to update current status');
+        }
     }
     async updateResponsibility(id, body) {
-        return this.activityService.updateResponsibility(id, body.responsibility);
+        try {
+            return await this.activityService.updateResponsibility(id, body.responsibility);
+        }
+        catch (err) {
+            console.error(`Update responsibility for ${id} failed:`, err);
+            if (err instanceof common_1.NotFoundException)
+                throw err;
+            throw new common_1.BadRequestException('Failed to update responsibility');
+        }
     }
 };
 exports.ActivityController = ActivityController;
@@ -51,7 +94,7 @@ __decorate([
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [create_activity_dto_1.CreateActivityDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ActivityController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
@@ -59,7 +102,7 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Fetch all root activities.' }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ActivityController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
@@ -72,7 +115,7 @@ __decorate([
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ActivityController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id/status'),
@@ -86,7 +129,7 @@ __decorate([
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, update_status_dto_1.UpdateStatusDto]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ActivityController.prototype, "updateStatus", null);
 __decorate([
     (0, common_1.Patch)(':id/current-status'),
@@ -97,7 +140,7 @@ __decorate([
     __param(1, (0, common_1.Body)('currentStatus')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, String]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], ActivityController.prototype, "updateCurrentStatus", null);
 __decorate([
     (0, common_1.Patch)(':id/responsibility'),

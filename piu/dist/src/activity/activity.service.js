@@ -23,85 +23,125 @@ let ActivityService = class ActivityService {
         this.activityRepo = activityRepo;
     }
     async create(dto) {
-        const activity = this.activityRepo.create(dto);
-        if (dto.parentActivityId) {
-            const parent = await this.activityRepo.findOneBy({
-                id: dto.parentActivityId,
-            });
-            if (!parent)
-                throw new common_1.NotFoundException('Parent activity not found');
-            activity.parentActivity = parent;
+        try {
+            const activity = this.activityRepo.create(dto);
+            if (dto.parentActivityId) {
+                const parent = await this.activityRepo.findOneBy({
+                    id: dto.parentActivityId,
+                });
+                if (!parent)
+                    throw new common_1.NotFoundException('Parent activity not found');
+                activity.parentActivity = parent;
+            }
+            return await this.activityRepo.save(activity);
         }
-        return this.activityRepo.save(activity);
+        catch (err) {
+            console.error('Create activity failed:', err);
+            throw new common_1.BadRequestException('Failed to create activity');
+        }
     }
     async findAll() {
-        return this.activityRepo.find({
-            where: { parentActivity: (0, typeorm_2.IsNull)() },
-            relations: ['subActivities'],
-        });
+        try {
+            return await this.activityRepo.find({
+                where: { parentActivity: (0, typeorm_2.IsNull)() },
+                relations: ['subActivities'],
+            });
+        }
+        catch (err) {
+            console.error('Fetch all activities failed:', err);
+            throw new common_1.BadRequestException('Failed to fetch activities');
+        }
     }
     async findOne(id) {
-        const activity = await this.activityRepo.findOne({
-            where: { id },
-            relations: ['subActivities', 'parentActivity'],
-        });
-        if (!activity)
-            throw new common_1.NotFoundException('Activity not found');
-        return activity;
+        try {
+            const activity = await this.activityRepo.findOne({
+                where: { id },
+                relations: ['subActivities', 'parentActivity'],
+            });
+            if (!activity)
+                throw new common_1.NotFoundException('Activity not found');
+            return activity;
+        }
+        catch (err) {
+            console.error(`Fetch activity ${id} failed:`, err);
+            if (err instanceof common_1.NotFoundException)
+                throw err;
+            throw new common_1.BadRequestException('Failed to fetch activity');
+        }
     }
     async updateStatus(id, dto) {
-        const activity = await this.activityRepo.findOne({
-            where: { id },
-            relations: ['subActivities', 'parentActivity'],
-        });
-        if (!activity)
-            throw new common_1.NotFoundException('Activity not found');
-        activity.status = dto.status;
-        await this.activityRepo.save(activity);
-        // ✅ Rule: Complete all sub-activities if parent is marked completed
-        if (activity.subActivities?.length > 0 &&
-            dto.status === status_enum_1.StatusEnum.COMPLETED) {
-            for (const sub of activity.subActivities) {
-                if (sub.status !== status_enum_1.StatusEnum.COMPLETED) {
-                    sub.status = status_enum_1.StatusEnum.COMPLETED;
-                    await this.activityRepo.save(sub);
-                }
-            }
-        }
-        // ✅ Rule: If all siblings complete, mark parent as completed
-        if (activity.parentActivity && dto.status === status_enum_1.StatusEnum.COMPLETED) {
-            const siblings = await this.activityRepo.find({
-                where: { parentActivity: { id: activity.parentActivity.id } },
+        try {
+            const activity = await this.activityRepo.findOne({
+                where: { id },
+                relations: ['subActivities', 'parentActivity'],
             });
-            const allCompleted = siblings.every((s) => s.status === status_enum_1.StatusEnum.COMPLETED);
-            if (allCompleted) {
-                const parent = await this.activityRepo.findOneBy({
-                    id: activity.parentActivity.id,
-                });
-                if (parent && parent.status !== status_enum_1.StatusEnum.COMPLETED) {
-                    parent.status = status_enum_1.StatusEnum.COMPLETED;
-                    await this.activityRepo.save(parent);
+            if (!activity)
+                throw new common_1.NotFoundException('Activity not found');
+            activity.status = dto.status;
+            await this.activityRepo.save(activity);
+            if (activity.subActivities?.length > 0 &&
+                dto.status === status_enum_1.StatusEnum.COMPLETED) {
+                for (const sub of activity.subActivities) {
+                    if (sub.status !== status_enum_1.StatusEnum.COMPLETED) {
+                        sub.status = status_enum_1.StatusEnum.COMPLETED;
+                        await this.activityRepo.save(sub);
+                    }
                 }
             }
+            if (activity.parentActivity && dto.status === status_enum_1.StatusEnum.COMPLETED) {
+                const siblings = await this.activityRepo.find({
+                    where: { parentActivity: { id: activity.parentActivity.id } },
+                });
+                const allCompleted = siblings.every((s) => s.status === status_enum_1.StatusEnum.COMPLETED);
+                if (allCompleted) {
+                    const parent = await this.activityRepo.findOneBy({
+                        id: activity.parentActivity.id,
+                    });
+                    if (parent && parent.status !== status_enum_1.StatusEnum.COMPLETED) {
+                        parent.status = status_enum_1.StatusEnum.COMPLETED;
+                        await this.activityRepo.save(parent);
+                    }
+                }
+            }
+            return activity;
         }
-        return activity;
+        catch (err) {
+            console.error(`Update status for ${id} failed:`, err);
+            if (err instanceof common_1.NotFoundException)
+                throw err;
+            throw new common_1.BadRequestException('Failed to update status');
+        }
     }
     async updateCurrentStatus(id, currentStatus) {
-        const activity = await this.activityRepo.findOneBy({ id });
-        if (!activity) {
-            throw new common_1.NotFoundException('Activity not found');
+        try {
+            const activity = await this.activityRepo.findOneBy({ id });
+            if (!activity)
+                throw new common_1.NotFoundException('Activity not found');
+            activity.currentStatus = currentStatus;
+            await this.activityRepo.save(activity);
+            return activity;
         }
-        activity.currentStatus = currentStatus;
-        await this.activityRepo.save(activity);
-        return activity;
+        catch (err) {
+            console.error(`Update current status for ${id} failed:`, err);
+            if (err instanceof common_1.NotFoundException)
+                throw err;
+            throw new common_1.BadRequestException('Failed to update current status');
+        }
     }
     async updateResponsibility(id, responsibility) {
-        const activity = await this.activityRepo.findOne({ where: { id } });
-        if (!activity) {
-            throw new common_1.NotFoundException('Activity not found');
+        try {
+            const activity = await this.activityRepo.findOne({ where: { id } });
+            if (!activity)
+                throw new common_1.NotFoundException('Activity not found');
+            activity.responsibility = responsibility;
+            return await this.activityRepo.save(activity);
         }
-        activity.responsibility = responsibility;
-        return this.activityRepo.save(activity);
+        catch (err) {
+            console.error(`Update responsibility for ${id} failed:`, err);
+            if (err instanceof common_1.NotFoundException)
+                throw err;
+            throw new common_1.BadRequestException('Failed to update responsibility');
+        }
     }
 };
 exports.ActivityService = ActivityService;
