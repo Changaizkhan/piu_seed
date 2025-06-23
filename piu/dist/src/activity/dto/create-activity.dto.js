@@ -54,7 +54,10 @@ __decorate([
     __metadata("design:type", Array)
 ], CreateActivityDto.prototype, "timelineQuarters", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
+    (0, swagger_1.ApiPropertyOptional)({ description: 'Optional custom text describing current progress or notes' }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)({ message: 'Current Status must be a string' }),
+    (0, class_validator_1.MaxLength)(255, { message: 'Current Status must be at most 255 characters' }),
     __metadata("design:type", String)
 ], CreateActivityDto.prototype, "currentStatus", void 0);
 __decorate([

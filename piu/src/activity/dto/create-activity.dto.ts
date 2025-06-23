@@ -45,7 +45,10 @@ export class CreateActivityDto {
     })
     timelineQuarters?: TimelineQuarterEnum[];
 
-    @ApiPropertyOptional()
+    @ApiPropertyOptional({ description: 'Optional custom text describing current progress or notes' })
+    @IsOptional()
+    @IsString({ message: 'Current Status must be a string' })
+    @MaxLength(255, { message: 'Current Status must be at most 255 characters' })
     currentStatus?: string;
 
     @ApiPropertyOptional()

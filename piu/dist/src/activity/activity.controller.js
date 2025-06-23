@@ -112,7 +112,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ActivityController.prototype, "updateResponsibility", null);
 exports.ActivityController = ActivityController = __decorate([
-    (0, swagger_1.ApiTags)('activities'),
+    (0, swagger_1.ApiTags)('Activities'),
     (0, common_1.Controller)('activities'),
     __metadata("design:paramtypes", [activity_service_1.ActivityService])
 ], ActivityController);

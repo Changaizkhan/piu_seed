@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExportController = void 0;
 const common_1 = require("@nestjs/common");
 const export_service_1 = require("./export.service");
+const swagger_1 = require("@nestjs/swagger");
 let ExportController = class ExportController {
     constructor(exportService) {
         this.exportService = exportService;
@@ -32,6 +33,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ExportController.prototype, "exportCsv", null);
 exports.ExportController = ExportController = __decorate([
+    (0, swagger_1.ApiTags)('Export'),
     (0, common_1.Controller)('export'),
     __metadata("design:paramtypes", [export_service_1.ExportService])
 ], ExportController);
