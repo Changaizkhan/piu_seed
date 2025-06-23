@@ -46,6 +46,9 @@ export class CreateActivityDto {
     timelineQuarters?: TimelineQuarterEnum[];
 
     @ApiPropertyOptional()
+    currentStatus?: string;
+
+    @ApiPropertyOptional()
     @IsOptional()
     @IsNumber({}, { message: 'parentActivityId must be a number' })
     @ValidateIf((o) => o.parentActivityId !== undefined)

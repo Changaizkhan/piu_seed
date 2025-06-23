@@ -7,15 +7,18 @@ import {
     Patch,
     Body,
     ParseIntPipe,
+    HttpCode,
 } from '@nestjs/common';
 import { ActivityService } from './activity.service';
 import { CreateActivityDto } from './dto/create-activity.dto';
 import { UpdateStatusDto } from './dto/update-status.dto';
+import { UpdateResponsibilityDto } from './dto/update-responsibility.dto';
 import {
     ApiTags,
     ApiResponse,
     ApiParam,
     ApiOperation,
+    ApiBody
 } from '@nestjs/swagger';
 
 @ApiTags('activities')
@@ -61,4 +64,28 @@ export class ActivityController {
     ) {
         return this.activityService.updateStatus(id, dto);
     }
+
+    @Patch(':id/current-status')
+    @ApiOperation({ summary: 'Update current status text of an activity' })
+    @ApiParam({ name: 'id', type: Number })
+    @ApiResponse({ status: 200, description: 'Update the current status of an activity.' })
+    updateCurrentStatus(
+        @Param('id', ParseIntPipe) id: number,
+        @Body('currentStatus') currentStatus: string,
+    ) {
+        return this.activityService.updateCurrentStatus(id, currentStatus);
+    }
+
+    @Patch(':id/responsibility')
+    @HttpCode(200)
+    @ApiOperation({ summary: 'Update Responsibility of Activity' })
+    @ApiParam({ name: 'id', type: Number })
+    @ApiBody({ type: UpdateResponsibilityDto })
+    async updateResponsibility(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() body: UpdateResponsibilityDto,
+    ) {
+        return this.activityService.updateResponsibility(id, body.responsibility);
+    }
+
 }

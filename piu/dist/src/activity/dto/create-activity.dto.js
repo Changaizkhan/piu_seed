@@ -55,6 +55,10 @@ __decorate([
 ], CreateActivityDto.prototype, "timelineQuarters", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
+    __metadata("design:type", String)
+], CreateActivityDto.prototype, "currentStatus", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)({}, { message: 'parentActivityId must be a number' }),
     (0, class_validator_1.ValidateIf)((o) => o.parentActivityId !== undefined),

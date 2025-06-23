@@ -94,4 +94,28 @@ export class ActivityService {
 
         return activity;
     }
+
+    async updateCurrentStatus(id: number, currentStatus: string) {
+        const activity = await this.activityRepo.findOneBy({ id });
+        if (!activity) {
+            throw new NotFoundException('Activity not found');
+        }
+
+        activity.currentStatus = currentStatus;
+
+        await this.activityRepo.save(activity);
+        return activity;
+    }
+
+    async updateResponsibility(id: number, responsibility: string) {
+        const activity = await this.activityRepo.findOne({ where: { id } });
+
+        if (!activity) {
+            throw new NotFoundException('Activity not found');
+        }
+
+        activity.responsibility = responsibility;
+        return this.activityRepo.save(activity);
+    }
+
 }

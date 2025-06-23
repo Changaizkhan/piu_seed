@@ -47,6 +47,11 @@ __decorate([
     __metadata("design:type", Array)
 ], Activity.prototype, "timelineQuarters", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ nullable: true }),
+    (0, swagger_1.ApiPropertyOptional)(),
+    __metadata("design:type", String)
+], Activity.prototype, "currentStatus", void 0);
+__decorate([
     (0, typeorm_1.ManyToOne)(() => Activity, (a) => a.subActivities, { nullable: true }),
     (0, swagger_1.ApiPropertyOptional)({ type: () => Activity }),
     __metadata("design:type", Activity)

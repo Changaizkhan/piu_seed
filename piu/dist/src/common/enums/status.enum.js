@@ -5,5 +5,5 @@ var StatusEnum;
 (function (StatusEnum) {
     StatusEnum["COMPLETED"] = "Completed";
     StatusEnum["IN_PROCESS"] = "In Process";
-    StatusEnum["DELAYED"] = "Delayed";
+    StatusEnum["NOT_STARTED"] = "Not Started";
 })(StatusEnum || (exports.StatusEnum = StatusEnum = {}));

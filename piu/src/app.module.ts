@@ -12,6 +12,7 @@ import { QuizModule } from './modules/quiz/quiz.module';
 import { QuestionModule } from './modules/question/question.module';
 import { EnrollmentModule } from './modules/enrollment/enrollment.module';
 import { ActivityModule } from './activity/activity.module';
+import { ExportModule } from './export/export.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ActivityModule } from './activity/activity.module';
     QuestionModule,
     EnrollmentModule,
     ActivityModule,
+    ExportModule,
   ],
 })
 export class AppModule { }

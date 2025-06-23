@@ -86,6 +86,23 @@ let ActivityService = class ActivityService {
         }
         return activity;
     }
+    async updateCurrentStatus(id, currentStatus) {
+        const activity = await this.activityRepo.findOneBy({ id });
+        if (!activity) {
+            throw new common_1.NotFoundException('Activity not found');
+        }
+        activity.currentStatus = currentStatus;
+        await this.activityRepo.save(activity);
+        return activity;
+    }
+    async updateResponsibility(id, responsibility) {
+        const activity = await this.activityRepo.findOne({ where: { id } });
+        if (!activity) {
+            throw new common_1.NotFoundException('Activity not found');
+        }
+        activity.responsibility = responsibility;
+        return this.activityRepo.save(activity);
+    }
 };
 exports.ActivityService = ActivityService;
 exports.ActivityService = ActivityService = __decorate([

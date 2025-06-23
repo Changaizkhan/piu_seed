@@ -18,6 +18,7 @@ const common_1 = require("@nestjs/common");
 const activity_service_1 = require("./activity.service");
 const create_activity_dto_1 = require("./dto/create-activity.dto");
 const update_status_dto_1 = require("./dto/update-status.dto");
+const update_responsibility_dto_1 = require("./dto/update-responsibility.dto");
 const swagger_1 = require("@nestjs/swagger");
 let ActivityController = class ActivityController {
     constructor(activityService) {
@@ -34,6 +35,12 @@ let ActivityController = class ActivityController {
     }
     updateStatus(id, dto) {
         return this.activityService.updateStatus(id, dto);
+    }
+    updateCurrentStatus(id, currentStatus) {
+        return this.activityService.updateCurrentStatus(id, currentStatus);
+    }
+    async updateResponsibility(id, body) {
+        return this.activityService.updateResponsibility(id, body.responsibility);
     }
 };
 exports.ActivityController = ActivityController;
@@ -81,6 +88,29 @@ __decorate([
     __metadata("design:paramtypes", [Number, update_status_dto_1.UpdateStatusDto]),
     __metadata("design:returntype", void 0)
 ], ActivityController.prototype, "updateStatus", null);
+__decorate([
+    (0, common_1.Patch)(':id/current-status'),
+    (0, swagger_1.ApiOperation)({ summary: 'Update current status text of an activity' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: Number }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Update the current status of an activity.' }),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)('currentStatus')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, String]),
+    __metadata("design:returntype", void 0)
+], ActivityController.prototype, "updateCurrentStatus", null);
+__decorate([
+    (0, common_1.Patch)(':id/responsibility'),
+    (0, common_1.HttpCode)(200),
+    (0, swagger_1.ApiOperation)({ summary: 'Update Responsibility of Activity' }),
+    (0, swagger_1.ApiParam)({ name: 'id', type: Number }),
+    (0, swagger_1.ApiBody)({ type: update_responsibility_dto_1.UpdateResponsibilityDto }),
+    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, update_responsibility_dto_1.UpdateResponsibilityDto]),
+    __metadata("design:returntype", Promise)
+], ActivityController.prototype, "updateResponsibility", null);
 exports.ActivityController = ActivityController = __decorate([
     (0, swagger_1.ApiTags)('activities'),
     (0, common_1.Controller)('activities'),

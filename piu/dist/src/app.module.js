@@ -20,6 +20,7 @@ const quiz_module_1 = require("./modules/quiz/quiz.module");
 const question_module_1 = require("./modules/question/question.module");
 const enrollment_module_1 = require("./modules/enrollment/enrollment.module");
 const activity_module_1 = require("./activity/activity.module");
+const export_module_1 = require("./export/export.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -36,6 +37,7 @@ exports.AppModule = AppModule = __decorate([
             question_module_1.QuestionModule,
             enrollment_module_1.EnrollmentModule,
             activity_module_1.ActivityModule,
+            export_module_1.ExportModule,
         ],
     })
 ], AppModule);

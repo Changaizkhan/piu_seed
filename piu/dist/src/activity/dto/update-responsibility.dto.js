@@ -9,21 +9,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateStatusDto = void 0;
-const swagger_1 = require("@nestjs/swagger");
-const status_enum_1 = require("../../common/enums/status.enum");
+exports.UpdateResponsibilityDto = void 0;
 const class_validator_1 = require("class-validator");
-class UpdateStatusDto {
+const allowed_responsibilities_1 = require("../../constants/allowed-responsibilities");
+class UpdateResponsibilityDto {
 }
-exports.UpdateStatusDto = UpdateStatusDto;
+exports.UpdateResponsibilityDto = UpdateResponsibilityDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ enum: status_enum_1.StatusEnum }),
-    (0, class_validator_1.IsEnum)(status_enum_1.StatusEnum),
-    __metadata("design:type", String)
-], UpdateStatusDto.prototype, "status", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsIn)(allowed_responsibilities_1.ALLOWED_RESPONSIBILITIES, {
+        message: 'Invalid responsibility. Only approved designations are allowed.',
+    }),
     __metadata("design:type", String)
-], UpdateStatusDto.prototype, "currentStatus", void 0);
+], UpdateResponsibilityDto.prototype, "responsibility", void 0);

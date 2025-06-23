@@ -35,6 +35,10 @@ export class Activity {
     @ApiPropertyOptional({ type: [String] })
     timelineQuarters!: string[];
 
+    @Column({ nullable: true })
+    @ApiPropertyOptional()
+    currentStatus?: string;
+
     @ManyToOne(() => Activity, (a) => a.subActivities, { nullable: true })
     @ApiPropertyOptional({ type: () => Activity })
     parentActivity?: Activity;

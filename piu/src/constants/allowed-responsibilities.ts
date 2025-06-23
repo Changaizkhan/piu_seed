@@ -1,0 +1,17 @@
+export const ALLOWED_RESPONSIBILITIES = [
+    'DD(Civil)\nADB',
+    'DD(Environment)\nAD(SSG)',
+    'DD(Civil)',
+    'DD(Procurement)\nDD(E&TS)',
+    'DD(E&TS)\nDD(Curriculum)',
+    'DD(PS&T)\nGender Specialist',
+    'DD(Curriculum)\nDD(E&TS)',
+    'DD(Curriculum)\nDD(E&TS)\nDD(Environment)',
+    'Gender Specialist\nAD(Contract)\nAD (Procurement)',
+    'DD(PS&T)',
+    'DD(Curriculum)\nDD(PST)\nDD(M&E)\nAD(ETS)',
+    'Communication Specialist',
+    'MIS specialist',
+    'DD(A&F)',
+    'DD(M&E)\nGender Specialist',
+];
